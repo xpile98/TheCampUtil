@@ -166,17 +166,23 @@ class MyWindow(QWidget):
     def load_txt(self):
         file_path, _ = QFileDialog.getOpenFileName(self, "Open file", "", "Text files (*.txt)")
         if file_path:
-            with open(file_path, 'r', encoding='utf-8') as f:
-                text = f.read()
-                msg_list = [text[i:i + 1500] for i in range(0, len(text), 1500)]
-                for i, msg in enumerate(self.msg_list):
-                    title = f"{os.path.basename(file_path)}_{i + 1}"
-                    item = QListWidgetItem(title)
-                    #item.path = temp_path
-                    self.msg_list.append(msg)
-                    self.title_list.append(title)
-                    self.img_list.append("")
-                    self.title_edit.addItem(item)
+            try:
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    text = f.read()
+
+                    msg_list = [text[i:i + 1500] for i in range(0, len(text), 1500)]
+                    for i, msg in enumerate(msg_list):
+                        title = f"{os.path.basename(file_path)}_{i + 1}"
+                        item = QListWidgetItem(title)
+                        #item.path = temp_path
+                        self.msg_list.append(msg)
+                        self.title_list.append(title)
+                        self.img_list.append("")
+                        self.title_edit.addItem(item)
+            except Exception as e:
+                QMessageBox.warning(self, "Warning", "utf-8 형식의 txt 파일만 불러올 수 있습니다. ")
+                return
+
 
     def load_image(self):
         return
